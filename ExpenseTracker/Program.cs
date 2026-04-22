@@ -55,7 +55,7 @@ builder.Services.AddSwaggerGen(options =>
 
     //// using System.Reflection;
     //var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    //options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFilename);
     if (File.Exists(xmlPath))
@@ -71,7 +71,7 @@ builder.Services.AddSwaggerGen(options =>
     options.OperationFilter<RequiredHeadersOperationFilter>();
 });
 
-
+//Build your appwith builder
 var app = builder.Build();
 
 // Correlation and response header middleware
