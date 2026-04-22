@@ -14,7 +14,7 @@ builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 builder.Logging.AddLog4Net("log4net.config");
 
-// Add services to the container.
+// Add services to the container.//
 
 
 
