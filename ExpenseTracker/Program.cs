@@ -1,5 +1,8 @@
 using ExpenseTracker;
 using ExpenseTracker.Swagger;
+using ExpenseTracker.Utility;
+using ExpenseTracker.Utility.Implementation;
+using ExpenseTracker.Utility.Interface;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -28,6 +31,14 @@ builder.Services.AddDbContext<ExpenseDbContext>(options =>
 builder.Services.AddScoped<ExpenseTracker.Services.IExpenseService, ExpenseTracker.Services.ExpenseService>();
 builder.Services.AddScoped<ExpenseTracker.Services.ICategoryService, ExpenseTracker.Services.CategoryService>();
 
+// get the confige value
+var configReader = new ServiceConfigReader(builder.Configuration);
+var serviceConfig = configReader.GetConfigSection<ServiceConfige>("ServiceConfige");
+//var serviceName= serviceConfig.ServiceName;
+builder.Services.AddSingleton(serviceConfig);
+//Console.WriteLine(serviceName);
+
+
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 //builder.Services.AddOpenApi();
 
@@ -37,8 +48,8 @@ builder.Services.AddSwaggerGen(options =>
     options.SwaggerDoc("v1", new OpenApiInfo
     {
         Version = "v1",
-        Title = "Expense Tracker API",
-        Description = "An ASP.NET Core Web API for managing expenses and categories",
+        Title = serviceConfig.ServiceName,
+        Description = serviceConfig.ServiceDescription,
         TermsOfService = new Uri("https://example.com/terms"),
         Contact = new OpenApiContact
         {
@@ -218,12 +229,21 @@ app.Use(async (context, next) =>
 });
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    //app.MapOpenApi();
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+//if (app.Environment.IsDevelopment())
+//{
+//    //app.MapOpenApi();
+//    app.UseSwagger();
+//    app.UseSwaggerUI();
+//}
+
+app.UseSwagger();
+//app.UseSwaggerUI(options =>
+//{
+//    // The Swagger JSON document name is registered as "v1" above (options.SwaggerDoc("v1", ...)).
+//    // Serve the correct swagger.json path so the UI gets a valid OpenAPI document.
+//    options.SwaggerEndpoint("/swagger/v1Secure/swagger.json", serviceConfig.ServiceName);
+//});
+app.UseSwaggerUI();
 
 // Global exception handler - logs and returns a generic 500 response
 app.UseExceptionHandler(errorApp =>
