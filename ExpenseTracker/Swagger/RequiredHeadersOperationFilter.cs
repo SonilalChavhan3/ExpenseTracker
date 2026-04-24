@@ -20,8 +20,9 @@ namespace ExpenseTracker.Swagger
                 In = ParameterLocation.Header,
                 Required = true,
                 Description = "Correlation id for tracing requests",
-                Schema = new OpenApiSchema { Type = "string", Default = new OpenApiString(corrIdExample) },
-               // Example = new OpenApiString(corrIdExample)
+                Schema = new OpenApiSchema { Type = "string"},
+                //Schema = new OpenApiSchema { Type = "string", Default = new OpenApiString(corrIdExample) },
+                 Example = new OpenApiString(corrIdExample)
             });
 
             // Caller Id
